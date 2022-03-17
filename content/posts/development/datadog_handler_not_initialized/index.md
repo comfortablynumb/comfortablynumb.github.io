@@ -26,7 +26,8 @@ is probably very similar.
 
 * [Problem Description](#problem-description)
 * [How to Fix it?](#how-to-fix-it)
-* [Additional Information]()
+* [Additional Information](#additional-information)
+* [Conclusion](#conclusion)
 
 
 ### Problem Description
@@ -84,4 +85,11 @@ To make sure that the library was effectively skipped when publishing your proje
 
 * There's an [issue in the datadog-lambda-js project](https://github.com/DataDog/datadog-lambda-js/issues/209) where I've added a [comment](https://github.com/DataDog/datadog-lambda-js/issues/209#issuecomment-1024746511) with these findings and the related [PR](https://github.com/DataDog/documentation/pull/12957) with the corresponding update in the Datadog documentation.
 * And [here](https://github.com/serverless-heaven/serverless-webpack/issues/306) is the related issue in the **serverless-webpack** plugin which mentions the problem with the exclusion of transitive dependencies.
+
+
+### Conclusion
+
+And this is the end of the first post of my site. I hope this helps you guys to fix this annoying issue.
+
+Sayonara!
 
