@@ -1,0 +1,14 @@
+baseURL: 'http://localhost'
+title: 'Berug0'
+theme: "m10c"
+params:
+  description: 'Some thoughts about software development, retro games and movies from the good old 80s'
+  avatar: 'images/logo.jpg'
+  favicon: 'images/favicon.ico'
+  social:
+    - icon: 'github'
+      name: 'My Github'
+      url: 'https://grithub.com/comfortablynumb'
+    - icon: 'linkedin'
+      name: 'My LinkedIn'
+      url: 'https://www.linkedin.com/in/gustavofalco'
