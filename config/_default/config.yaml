@@ -9,7 +9,7 @@ params:
   social:
     - icon: 'github'
       name: 'My Github'
-      url: 'https://grithub.com/comfortablynumb'
+      url: 'https://github.com/comfortablynumb'
     - icon: 'linkedin'
       name: 'My LinkedIn'
       url: 'https://www.linkedin.com/in/gustavofalco'
