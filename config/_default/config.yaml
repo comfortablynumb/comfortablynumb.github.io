@@ -1,4 +1,4 @@
-baseURL: 'https://comfortablynumb.github.io'
+baseURL: 'http://localhost'
 title: 'Berug0'
 theme: "m10c"
 params:
