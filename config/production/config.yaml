@@ -1,1 +1,3 @@
 baseURL: 'https://comfortablynumb.github.io'
+minify:
+  disableHTML: false
