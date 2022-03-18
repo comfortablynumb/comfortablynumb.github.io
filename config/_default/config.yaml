@@ -1,11 +1,14 @@
 baseURL: 'http://localhost'
 title: 'Berug0'
-theme: "m10c"
+theme: 'm10c'
+googleAnalytics: 'G-R9B3CPPMVE'
 params:
   author: 'Gustavo Falco'
   description: 'Some thoughts about software development, retro games and movies from the good old 80s'
   avatar: 'images/logo.jpg'
   favicon: '/images/favicon.ico'
+  css:
+    - 'css/custom.css'
   social:
     - icon: 'github'
       name: 'My Github'
