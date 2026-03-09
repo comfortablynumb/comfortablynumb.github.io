@@ -4,6 +4,12 @@ theme: 'm10c'
 googleAnalytics: 'G-R9B3CPPMVE'
 menu:
   main:
+    - identifier: 'projects'
+      name: 'Projects'
+      url: '/projects/'
+    - identifier: 'posts'
+      name: 'Posts'
+      url: '/posts/'
     - identifier: 'developer-tools'
       name: 'Developer Tools'
       url: 'https://comfortablynumb.github.io/berugo-dev/'
