@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datadog, Serverless and AWS Lambda: &quot;datadog:handler not initialized&quot; issue - Berug0</title>
+  <meta name="description" content="How to fix the &quot;datadog:handler not initialized&quot; error in aws lambda when using the datadog-lambda-js component">
+  <meta name="author" content="Gustavo Falco">
+  <link rel="icon" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta property="og:title" content='Datadog, Serverless and AWS Lambda: "datadog:handler not initialized" issue'>
+  <meta property="og:description" content='How to fix the "datadog:handler not initialized" error in aws lambda when using the datadog-lambda-js component'>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://comfortablynumb.github.io/berugo-site/posts/development/datadog_handler_not_initialized/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content='Datadog, Serverless and AWS Lambda: "datadog:handler not initialized" issue'>
+  <meta name="twitter:description" content='How to fix the "datadog:handler not initialized" error in aws lambda when using the datadog-lambda-js component'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+    ::selection { background: #34d399; color: #0f172a; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    .prose h2 {
+      color: #fff;
+      font-size: 1.5em;
+      font-weight: 700;
+      margin-top: 2.5em;
+      margin-bottom: 0.75em;
+      padding-bottom: 0.5em;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .prose p {
+      margin-bottom: 1.25em;
+      line-height: 1.8;
+    }
+    .prose ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1.25em;
+    }
+    .prose li {
+      margin-bottom: 0.5em;
+      padding-left: 1.5em;
+      position: relative;
+    }
+    .prose li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+    }
+    .prose a {
+      color: #34d399;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(52,211,153,0.3);
+      transition: all 0.3s;
+    }
+    .prose a:hover {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+    .prose hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      margin: 2em 0;
+    }
+    .prose strong {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    .prose pre[class*="language-"] {
+      background: rgba(15, 23, 42, 0.8) !important;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-left: 3px solid #34d399;
+      border-radius: 12px;
+      margin: 1.5em 0;
+      padding: 1.5em !important;
+      font-size: 0.85em;
+      overflow-x: auto;
+    }
+    .prose code:not([class*="language-"]) {
+      background: rgba(255,255,255,0.06);
+      padding: 0.2em 0.5em;
+      border-radius: 6px;
+      font-size: 0.875em;
+      color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .toc a {
+      color: #94a3b8;
+      text-decoration: none;
+      border: none;
+      transition: color 0.3s;
+    }
+    .toc a:hover { color: #34d399; }
+    .toc li::before { background: #475569; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R9B3CPPMVE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R9B3CPPMVE');
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-300 min-h-screen flex flex-col">
+  <div id="navbar"></div>
+
+  <main class="pt-28 pb-20 px-6 flex-1">
+    <article class="max-w-3xl mx-auto">
+      <!-- Back link -->
+      <a href="/" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-emerald-400 transition-colors duration-300 mb-8 no-underline">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to posts
+      </a>
+
+      <!-- Header -->
+      <header class="mb-10">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-400/10 text-emerald-400 border border-emerald-400/20">datadog</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">aws</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-violet-400/10 text-violet-400 border border-violet-400/20">lambda</span>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">serverless</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold text-white leading-tight tracking-tight">
+          Datadog, Serverless and AWS Lambda: &quot;datadog:handler not initialized&quot; issue
+        </h1>
+        <div class="mt-5 flex items-center gap-6 text-sm text-slate-500">
+          <div class="flex items-center gap-2">
+            <img src="/images/logo.jpg" alt="Berug0" class="w-7 h-7 rounded-full ring-1 ring-white/10">
+            <span class="text-slate-400">Berug0</span>
+          </div>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Mar 16, 2022
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            4 min read
+          </span>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="prose">
+        <p>In this post I'll describe how to fix the <strong>datadog:handler not initialized</strong> issue, which may happen to you if you're using the
+        <a href="https://github.com/DataDog/datadog-lambda-js">datadog-lambda-js</a> library in a project deployed in a lambda which already
+        has the <strong>Datadog Lambda layer</strong>.</p>
+
+        <p>The fix described here applies to projects using <a href="https://github.com/serverless/serverless">Serverless</a>
+        with the <a href="https://github.com/serverless-heaven/serverless-webpack">serverless-webpack</a> plugin. Nevertheless, if you're not using
+        these tools, but you're having this issue anyway, the solution described here may also be useful for you since the way to fix it
+        is probably very similar.</p>
+
+        <hr>
+
+        <!-- Table of Contents -->
+        <div class="toc rounded-xl border border-white/5 bg-white/[0.02] p-6 my-8">
+          <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Table of Contents</h3>
+          <ul>
+            <li><a href="#problem-description">Problem Description</a></li>
+            <li><a href="#how-to-fix-it">How to Fix it?</a></li>
+            <li><a href="#additional-information">Additional Information</a></li>
+            <li><a href="#conclusion">Conclusion</a></li>
+          </ul>
+        </div>
+
+        <h2 id="problem-description">Problem Description</h2>
+
+        <p>This error appears when you try to send a metric with, for example, the <strong>sendDistributionMetricWithDate</strong> function from the <strong>datadog-lambda-js</strong> library. Looking at
+        the code of <a href="https://github.com/DataDog/datadog-lambda-js/blob/35580a1efb714e25b5c7db1310efeee3132fc6e3/src/index.ts#L181">this function</a>,
+        we can see that the error is logged when the <strong>currentMetricsListener</strong> variable is not set. This variable is set <a href="https://github.com/DataDog/datadog-lambda-js/blob/35580a1efb714e25b5c7db1310efeee3132fc6e3/src/index.ts#L115">on this line</a>, which basically happens when
+        your lambda function being wrapped by this library is executed.</p>
+
+        <p>So, with this information, we can conclude that:</p>
+
+        <ul>
+          <li>The error happens if <strong>currentMetricsListener</strong> variable is not set.</li>
+          <li>This variable is always set just before our lambda function is executed.</li>
+          <li>Our lambda function is executed since we're calling a function from the <strong>datadog-lambda-js</strong> library to send some metrics.</li>
+          <li>With all this in mind: How is it possible that our lambda function is being called but the <strong>currentMetricsListener</strong> variable is still not set?</li>
+        </ul>
+
+        <p>The answer is: The <strong>datadog-lambda-js</strong> library is being loaded more than once! :O</p>
+
+        <p>The issue here is that the <strong>Datadog Lambda Layer</strong> already provides this library, so we must make sure we're not including it in our lambda inside the
+        <strong>node_modules</strong> directory. And here is where the main problem lies: If you're using Serverless and its webpack plugin, there's a <a href="https://github.com/serverless-heaven/serverless-webpack/issues/306">known issue</a>
+        with the exclusion of transitive dependencies. So, even if you add <strong>datadog-lambda-js</strong> to the exclusion list, <strong>it's possible that
+        it's being included anyway!</strong></p>
+
+        <h2 id="how-to-fix-it">How to Fix it?</h2>
+
+        <p>The hard part was actually finding where the issue was. The fix is pretty straightforward. You just need to force the removal
+        of the <strong>datadog-lambda-js</strong> library from your <strong>node_modules</strong> before publishing your code to the lambda. In Serverless, you
+        can do it this way:</p>
+
+        <pre><code class="language-yaml">custom:
+  webpack:
+    packagerOptions:
+      scripts:
+        - rm -rf node_modules/datadog-lambda-js
+        # Also, remember that some libraries may depend on datadog-lambda-js too, so this library could be
+        # embedded into their own node_modules directory.
+        - rm -rf node_modules/some-other-dependency/node-modules/datadog-lambda-js</code></pre>
+
+        <p>If you're not using serverless and its webpack plugin, but you're still having this issue, the fix may be the same. Just
+        remove any <strong>datadog-lambda-js</strong> directory inside your <strong>node_modules</strong>.</p>
+
+        <p>To make sure that the library was effectively skipped when publishing your project, you can follow this steps:</p>
+
+        <ul>
+          <li>Go to the <strong>AWS Lambda</strong> section in the AWS Portal.</li>
+          <li>Search for your lambda.</li>
+          <li>Click on the <strong>Actions</strong> select and then choose the <strong>Export</strong> option.</li>
+          <li>Download the <strong>zip</strong> file containing the code that is published in your lambda.</li>
+          <li>Unzip it and search for the <strong>datadog-lambda-js</strong> folder inside <strong>node_modules</strong>. If at least one <strong>datadog-lambda-js</strong> folder is still there, make sure you've used the correct commands to remove them!</li>
+        </ul>
+
+        <h2 id="additional-information">Additional Information</h2>
+
+        <ul>
+          <li>There's an <a href="https://github.com/DataDog/datadog-lambda-js/issues/209">issue in the datadog-lambda-js project</a> where I've added a <a href="https://github.com/DataDog/datadog-lambda-js/issues/209#issuecomment-1024746511">comment</a> with these findings and the related <a href="https://github.com/DataDog/documentation/pull/12957">PR</a> with the corresponding update in the Datadog documentation.</li>
+          <li>And <a href="https://github.com/serverless-heaven/serverless-webpack/issues/306">this is the related issue</a> in the <strong>serverless-webpack</strong> plugin which mentions the problem with the exclusion of transitive dependencies.</li>
+        </ul>
+
+        <h2 id="conclusion">Conclusion</h2>
+
+        <p>And this is the end of the first post of my site. I hope this helps you guys to fix this annoying issue.</p>
+
+        <p>Sayonara!</p>
+      </div>
+    </article>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="/js/components.js"></script>
+  <script>
+    $(function(){
+      renderNavbar('#navbar');
+      renderFooter('#footer');
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+</body>
+</html>
