@@ -1,6 +1,7 @@
 function renderNavbar(containerSelector) {
   var currentPath = window.location.pathname.replace(/\/$/, '') || '';
   var isHomeActive = currentPath === '' || currentPath.startsWith('/posts');
+  var isProjectsActive = currentPath.startsWith('/projects');
   var activeClass = 'text-emerald-400';
   var inactiveClass = 'text-slate-300 hover:text-white';
 
@@ -14,7 +15,7 @@ function renderNavbar(containerSelector) {
         '<div class="flex items-center gap-8">' +
           '<div class="hidden sm:flex items-center gap-6 text-sm font-medium">' +
             '<a href="/" class="' + (isHomeActive ? activeClass : inactiveClass) + ' transition-colors duration-300 no-underline">Home</a>' +
-            '<a href="https://comfortablynumb.github.io/berugo-dev/" class="' + inactiveClass + ' transition-colors duration-300 no-underline">Dev Tools</a>' +
+            '<a href="/projects/" class="' + (isProjectsActive ? activeClass : inactiveClass) + ' transition-colors duration-300 no-underline">Projects</a>' +
           '</div>' +
           '<div class="flex items-center gap-3">' +
             '<a href="https://github.com/comfortablynumb" class="text-slate-400 hover:text-white transition-colors duration-300" title="GitHub">' +
@@ -32,7 +33,7 @@ function renderNavbar(containerSelector) {
       '</div>' +
       '<div id="mobile-menu" class="hidden sm:hidden border-t border-white/5 px-6 py-4 space-y-3 text-sm font-medium">' +
         '<a href="/" class="block ' + (isHomeActive ? activeClass : inactiveClass) + ' no-underline">Home</a>' +
-        '<a href="https://comfortablynumb.github.io/berugo-dev/" class="block ' + inactiveClass + ' no-underline">Dev Tools</a>' +
+        '<a href="/projects/" class="block ' + (isProjectsActive ? activeClass : inactiveClass) + ' no-underline">Projects</a>' +
       '</div>' +
     '</nav>';
 
