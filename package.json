@@ -1,0 +1,9 @@
+{
+  "name": "berugo-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Berug0's personal blog",
+  "scripts": {
+    "serve": "npx serve ."
+  }
+}
