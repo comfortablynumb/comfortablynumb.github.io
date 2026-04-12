@@ -15,6 +15,7 @@ Personal blog - static HTML site using jQuery + Tailwind CSS (both via CDN).
 index.html                              # Home - hero + posts list
 404.html                                # Error page
 posts/development/.../index.html        # Blog post
+projects/index.html                     # Projects showcase
 tags/index.html                         # Tags grid
 js/components.js                        # Shared navbar + footer (jQuery)
 images/                                 # Logo, favicons
